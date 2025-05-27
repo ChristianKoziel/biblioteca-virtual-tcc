@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
     
-    // Rotas de perfil
+    // Rotas de perfil do usuário
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -29,9 +29,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/share-pdf', [ProfileController::class, 'sharePdf'])->name('share.pdf');
     Route::post('/upload-pdf', [ProfileController::class, 'upload'])->name('pdf.upload');
 
+    // Rota para mostrar perfil do usuário
     Route::get('/perfil', [ProfileController::class, 'show'])->name('profile.show');
-
-
-
     
+    // Rotas para gerenciar livros
+    Route::delete('/books/{id}', [ProfileController::class, 'deleteBook'])->name('books.delete');
+    Route::get('/books/{id}/edit', [ProfileController::class, 'editBook'])->name('books.edit');
+    Route::post('/books/{id}', [ProfileController::class, 'updateBook'])->name('books.update');
 });

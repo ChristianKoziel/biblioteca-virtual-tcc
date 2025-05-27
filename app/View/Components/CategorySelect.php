@@ -36,7 +36,6 @@ class CategorySelect extends Component
             'História',
             'HQs, Mangás e Graphic Novels',
             'Infantil',
-            'LGBTQ+',
             'Literatura e Ficção',
             'Medicina',
             'Policial, Suspense e Mistério',
