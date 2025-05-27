@@ -108,7 +108,7 @@
             <!-- Avatar do usuário mobile -->
             @auth
                 <button id="mobile-avatar-btn" class="flex items-center focus:outline-none">
-                    <img src="{{ 'storage/'.Auth::user()->avatar ?? 'storage/usuario.png' }}" alt="Usuário" class="h-8 w-8 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
+                    <img src="{{ Auth::user()->avatar ? 'storage/'.Auth::user()->avatar : 'storage/usuario.png' }}" alt="Usuário" class="h-8 w-8 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
                 </button>
             @else
                 <button id="mobile-avatar-btn" class="flex items-center focus:outline-none">
@@ -123,7 +123,7 @@
                 <!-- Usuário logado -->
                 <div class="flex items-center">
                     <button id="avatar-btn" class="flex items-center focus:outline-none" aria-expanded="false">
-                        <img src="{{ 'storage/'.Auth::user()->avatar ?? 'storage/usuario.png' }}" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
+                        <img src="{{ Auth::user()->avatar ? 'storage/'.Auth::user()->avatar : 'storage/usuario.png' }}" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
@@ -239,7 +239,7 @@
     <div id="mobile-user-menu" class="hidden md:hidden px-4 py-3 bg-white border-t border-gray-200">
         @auth
             <div class="flex items-center mb-4 pb-2 border-b border-gray-200">
-                <img src="{{ Auth::user()->avatar ?? 'storage/usuario.png' }}" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 mr-3">
+                <img src="{{ Auth::user()->avatar ? 'storage/'.Auth::user()->avatar : 'storage/usuario.png' }}" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 mr-3">
                 <div>
                     <p class="font-medium text-gray-800">{{ Auth::user()->name }}</p>
                     <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
