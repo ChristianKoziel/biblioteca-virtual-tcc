@@ -10,13 +10,13 @@
             </div>
             
             <div class="flex space-x-6">
-                <a href="#" class="text-gray-400 hover:text-white transition-all duration-200">
+                {{-- <a href="#" class="text-gray-400 hover:text-white transition-all duration-200">
                     <i class="fab fa-facebook-f text-xl"></i>
                 </a>
                 <a href="#" class="text-gray-400 hover:text-white transition-all duration-200">
                     <i class="fab fa-twitter text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-all duration-200">
+                </a> --}}
+                <a href="https://www.instagram.com/usebookfy?igsh=MWRsOThwdzZ6cGtqMA%3D%3D&utm_source=qr" class="text-gray-400 hover:text-white transition-all duration-200">
                     <i class="fab fa-instagram text-xl"></i>
                 </a>
             </div>
