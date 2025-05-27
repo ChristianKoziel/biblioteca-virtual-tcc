@@ -1,20 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-    <!-- Menu mobile componentizado -->
-
     <div class="container mx-auto px-4 py-8">
-        <!-- Grid de livros CORRIGIDO -->
+        <!-- Grid de livros -->
         <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             @foreach ($pdfs as $pdf)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 hover:shadow-lg transition-transform duration-300 flex flex-col h-full">
                     <!-- Capa do livro -->
                     <div class="relative pt-[140%]">
-                        <img src="{{ asset('storage/' . $pdf->image_path . '.jpg') }}" 
+                        <img src="{{ asset('storage/' . $pdf->image_path.'.jpg') }}" 
                              alt="Capa do livro {{ $pdf->title }}" 
                              class="absolute top-0 left-0 w-full h-full object-contain cursor-pointer"
-                             onclick="openBookPopup('{{ $pdf->title }}', '{{ $pdf->author }}', '{{ $pdf->description }}', '{{ asset('storage/' . $pdf->file_path) }}', '{{ asset('storage/' . $pdf->image_path . '.jpg') }}')">
+                             onclick="openBookPopup('{{ $pdf->title }}', '{{ $pdf->author }}', '{{ $pdf->description }}', '{{ route('book.download', $pdf->id) }}', '{{ asset('storage/' . $pdf->image_path.'.jpg') }}')">
                     </div>
+                    
                     <!-- Detalhes do livro -->
                     <div class="p-4 flex flex-col flex-grow">
                         <div class="flex-grow">
@@ -22,11 +21,18 @@
                             <p class="text-gray-600">por {{ $pdf->author }}</p>
                         </div>
                         <div class="mt-4">
-                            <a href="{{ asset('storage/' . $pdf->file_path) }}" download class="block w-full">
-                                <button class="w-full py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300">
-                                    Baixar PDF
+                            @auth
+                                <a href="{{ route('book.download', $pdf->id) }}" class="block w-full">
+                                    <button class="w-full py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300">
+                                        Baixar PDF
+                                    </button>
+                                </a>
+                            @else
+                                <button onclick="showLoginPopup()" 
+                                        class="w-full py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300">
+                                    Faça login para baixar
                                 </button>
-                            </a>
+                            @endauth
                         </div>
                     </div>
                 </div>
@@ -63,11 +69,19 @@
                     </div>
                     
                     <div class="flex flex-wrap gap-3">
-                        <a id="popup-download-pdf" href="#" download
-                           class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 transition">
-                            <i class="fas fa-download"></i>
-                            Baixar PDF
-                        </a>
+                        @auth
+                            <a id="popup-download-pdf" href="#" 
+                               class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 transition">
+                                <i class="fas fa-download"></i>
+                                Baixar PDF
+                            </a>
+                        @else
+                            <button onclick="showLoginPopup()"
+                                    class="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg flex items-center gap-2 transition">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Faça login para baixar
+                            </button>
+                        @endauth
                         
                         <button onclick="closePopup()"
                                 class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-5 py-2 rounded-lg transition">
@@ -79,13 +93,56 @@
         </div>
     </div>
     
-    <!-- Outros popups -->
+    <!-- Popup de login -->
     <div id="login-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <!-- ... conteúdo do popup de login ... -->
-    </div>
-    
-    <div id="epub-dev-popup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[60] hidden">
-        <!-- ... conteúdo do popup EPUB ... -->
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">Login necessário</h2>
+                <button onclick="hideLoginPopup()" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    &times;
+                </button>
+            </div>
+            
+            <p class="mb-6 text-gray-600">Você precisa estar logado para baixar este livro.</p>
+            
+            <div class="flex flex-col space-y-3">
+                <a href="{{ route('login') }}" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded text-center transition">
+                    Fazer Login
+                </a>
+                <a href="{{ route('register') }}" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded text-center transition">
+                    Criar Conta
+                </a>
+            </div>
+        </div>
     </div>
 
+    <script>
+        // Funções para controlar os popups
+        function openBookPopup(title, author, description, pdfUrl, imageUrl) {
+            document.getElementById('popup-title').textContent = title;
+            document.getElementById('popup-author').textContent = 'por ' + author;
+            document.getElementById('popup-description').textContent = description || 'Nenhuma descrição disponível.';
+            document.getElementById('popup-image').src = imageUrl;
+            
+            // Configura o link de download no popup
+            const downloadBtn = document.getElementById('popup-download-pdf');
+            if (downloadBtn) {
+                downloadBtn.href = pdfUrl;
+            }
+            
+            document.getElementById('book-popup').classList.remove('hidden');
+        }
+        
+        function closePopup() {
+            document.getElementById('book-popup').classList.add('hidden');
+        }
+        
+        function showLoginPopup() {
+            document.getElementById('login-popup').classList.remove('hidden');
+        }
+        
+        function hideLoginPopup() {
+            document.getElementById('login-popup').classList.add('hidden');
+        }
+    </script>
 @endsection

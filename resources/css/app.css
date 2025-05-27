@@ -1,7 +1,30 @@
-/* Importar o Bootstrap primeiro */
-@import 'bootstrap/dist/css/bootstrap.min.css'; /* Carrega o CSS do Bootstrap */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
-/* Importar o Tailwind depois */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Customizações para os labels flutuantes */
+.peer:focus ~ .peer-focus\:-translate-y-5,
+.peer:focus ~ .peer-focus\:scale-85 {
+    transform: translateY(-1.25rem) scale(0.85);
+    color: #667eea;
+}
+
+.peer:not(:placeholder-shown) ~ .peer-\[\:not\(\:placeholder-shown\)\]\:-translate-y-5,
+.peer:not(:placeholder-shown) ~ .peer-\[\:not\(\:placeholder-shown\)\]:scale-85 {
+    transform: translateY(-1.25rem) scale(0.85);
+}
+
+/* Animações customizadas */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.book-icon {
+    animation: float 3s ease-in-out infinite;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}

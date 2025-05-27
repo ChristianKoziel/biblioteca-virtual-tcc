@@ -12,6 +12,8 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('avatar')->nullable(); // Campo novo para o caminho da imagem
+            $table->text('bio')->nullable(); // Adicionei bio também, que é comum em perfis
             $table->rememberToken();
             $table->timestamps();
         });

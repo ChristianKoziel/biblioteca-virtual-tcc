@@ -21,7 +21,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
+        'bio'
     ];
+    // Adicione este método para facilitar o acesso à URL do avatar
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ? asset('storage/'.$this->avatar) : asset('images/default-avatar.png');
+    }
 
     /**
      * The attributes that should be hidden for serialization.

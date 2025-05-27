@@ -17,6 +17,31 @@ use \Imagick;
 
 class ProfileController extends Controller
 {
+    // Adicione este método na classe ProfileController
+public function download($id)
+{
+    $book = Upload::findOrFail($id);
+    
+    // Verifica se o arquivo existe
+    $filePath = storage_path('app/public/' . $book->file_path);
+    
+    if (!file_exists($filePath)) {
+        // Tenta o caminho alternativo caso esteja usando link simbólico
+        $altPath = public_path('storage/' . $book->file_path);
+        
+        if (!file_exists($altPath)) {
+            abort(404, 'Arquivo não encontrado');
+        }
+        
+        $filePath = $altPath;
+    }
+    
+    // Define o nome do arquivo para download
+    $downloadName = Str::slug($book->title) . '.pdf';
+    
+    // Força o download
+    return response()->download($filePath, $downloadName);
+}
     // função home
     public function home(Request $request) 
 {
@@ -197,38 +222,23 @@ private function generatePdfCover($pdfFile)
     }
 }
 
-    // Método para criar uma capa padrão caso a conversão falhe
-    // private function generateDefaultCover($imagePath, $pdfFile = null)
-    // {
-    //     $fullImagePath = storage_path('app/public/' . $imagePath);
-        
-    //     // Obter título do PDF (usamos o que foi enviado no formulário)
-    //     $title = request()->title ?? 'PDF';
-        
-    //     // Gerar cores baseadas no título para tornar capas visualmente distintas
-    //     $hash = md5($title);
-    //     $r = hexdec(substr($hash, 0, 2));
-    //     $g = hexdec(substr($hash, 2, 2));
-    //     $b = hexdec(substr($hash, 4, 2));
-        
-    //     // Criar uma imagem padrão com texto
-    //     $img = Image::canvas(200, 280, "rgb($r,$g,$b)");
-        
-    //     // Adicionar título como texto na imagem
-    //     $img->text(strtoupper(substr($title, 0, 20)), 100, 140, function($font) {
-    //         $font->size(20);
-    //         $font->color('#ffffff');
-    //         $font->align('center');
-    //         $font->valign('middle');
-    //     });
-        
-    //     $img->save($fullImagePath);
-    //     return $imagePath;
-    // }
-
     /**
-     * Display the user's profile form.
+     * Mostra o perfil do usuário
      */
+    public function show(Request $request): View
+{
+    $user = Auth::user();
+    
+    // Busca os livros do usuário com paginação
+    $userBooks = Upload::where('user_id', $user->id)
+                     ->latest()
+                     ->paginate(12);
+
+    return view('profile.show', [
+        'user' => $user,
+        'books' => $userBooks // Certifique-se de que o nome aqui bate com o usado na view
+    ]);
+}
 
     
     // Adicione este método no seu ProfileController
@@ -285,17 +295,43 @@ private function generatePdfCover($pdfFile)
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-    {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+{
+    $validated = $request->validated();
+    
+    // Processamento do avatar
+    if ($request->hasFile('avatar')) {
+        // Remove a imagem antiga se existir
+        if ($request->user()->avatar) {
+            Storage::delete('public/'.$request->user()->avatar);
         }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        
+        // Armazena a nova imagem
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $validated['avatar'] = $path;
     }
+
+    // Adiciona a bio aos dados validados
+    $validated['bio'] = $request->bio;
+
+    $request->user()->fill($validated);
+
+    if ($request->user()->isDirty('email')) {
+        $request->user()->email_verified_at = null;
+    }
+
+    $request->user()->save();
+
+    return Redirect::route('profile.edit')->with('status', 'profile-updated');
+}
+/**
+ * Mostra o formulário de edição do perfil
+ */
+public function edit(): View
+{
+    return view('profile.edit', [
+        'user' => Auth::user()
+    ]);
+}
 
     /**
      * Delete the user's account.

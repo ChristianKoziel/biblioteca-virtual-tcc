@@ -407,7 +407,7 @@ function closeSuccessModal() {
 // Função para visualizar o livro enviado
 function viewUploadedBook() {
     const bookId = document.getElementById('modalBookId').textContent;
-    window.location.href = `/livros/${bookId}`;
+    window.location.href = `/`;
 }
 
 // Funções de compartilhamento

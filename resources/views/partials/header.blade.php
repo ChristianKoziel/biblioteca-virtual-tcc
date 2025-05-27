@@ -68,14 +68,25 @@
             </a>
             
             <!-- Botão de Compartilhar PDF -->
-            <div class="ml-4">
-                <a href="{{ route('share.pdf') }}" class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-medium px-4 py-2 rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-700 hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                    </svg>
-                    <span>Compartilhar</span>
-                </a>
-            </div>
+            @auth
+                <div class="ml-4">
+                    <a href="{{ route('share.pdf') }}" class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-medium px-4 py-2 rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-700 hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                        <span>Compartilhar</span>
+                    </a>
+                </div>
+            @else
+                <div class="ml-4">
+                    <button onclick="showLoginPopup()" class="bg-gradient-to-r from-indigo-500 to-blue-600 text-white font-medium px-4 py-2 rounded-lg shadow-md hover:from-indigo-600 hover:to-blue-700 hover:shadow-lg transition-all duration-300 transform hover:scale-105 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                        </svg>
+                        <span>Compartilhar</span>
+                    </button>
+                </div>
+            @endauth
         </nav>
         
         <!-- Controles Mobile (Pesquisa, Menu e Avatar) -->
@@ -95,41 +106,57 @@
             </button>
             
             <!-- Avatar do usuário mobile -->
-            <button id="mobile-avatar-btn" class="flex items-center focus:outline-none">
-                <img src="storage/usuario.png" alt="Usuário" class="h-8 w-8 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
-            </button>
+            @auth
+                <button id="mobile-avatar-btn" class="flex items-center focus:outline-none">
+                    <img src="{{ 'storage/'.Auth::user()->avatar ?? 'storage/usuario.png' }}" alt="Usuário" class="h-8 w-8 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
+                </button>
+            @else
+                <button id="mobile-avatar-btn" class="flex items-center focus:outline-none">
+                    <img src="storage/usuario.png" alt="Usuário" class="h-8 w-8 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
+                </button>
+            @endauth
         </div>
         
         <!-- Avatar do usuário - visível apenas em desktop -->
         <div class="relative z-50 ml-4 hidden md:block">
-            <div class="flex items-center">
-                <button id="avatar-btn" class="flex items-center focus:outline-none" aria-expanded="false">
-                    <img src="storage/usuario.png" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                </button>
-            </div>
+            @auth
+                <!-- Usuário logado -->
+                <div class="flex items-center">
+                    <button id="avatar-btn" class="flex items-center focus:outline-none" aria-expanded="false">
+                        <img src="{{ 'storage/'.Auth::user()->avatar ?? 'storage/usuario.png' }}" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 hover:border-indigo-400 shadow-md transition-all duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                </div>
 
-            <!-- Dropdown do avatar -->
-            <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg hidden overflow-hidden border border-gray-100 transform origin-top-right transition-all duration-200">
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                    Meu Perfil
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                    Minhas Leituras
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                    Favoritos
-                </a>
-                <div class="border-t border-gray-100"></div>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
-                    Configurações
-                </a>
-                <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-red-600 transition-colors">
-                    Sair
-                </a>
-            </div>
+                <!-- Dropdown do avatar -->
+                <div id="dropdown" class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg hidden overflow-hidden border border-gray-100 transform origin-top-right transition-all duration-200">
+                    <a href="/perfil" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                        Meu Perfil
+                    </a>
+                    <div class="border-t border-gray-100"></div>
+                    <a href="/profile" class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors">
+                        Configurações
+                    </a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-red-600 transition-colors">
+                            Sair
+                        </button>
+                    </form>
+                </div>
+            @else
+                <!-- Usuário não logado -->
+                <div class="flex items-center space-x-4">
+                    <a href="{{ route('login') }}" class="px-3 py-1.5 text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
+                        Entrar
+                    </a>
+                    <a href="{{ route('register') }}" class="px-3 py-1.5 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-medium transition-colors">
+                        Cadastrar
+                    </a>
+                </div>
+            @endauth
         </div>
     </div>
     
@@ -196,40 +223,54 @@
             </a>
             
             <!-- Botão Compartilhar Mobile -->
-            <a href="{{ route('share.pdf') }}" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 flex items-center">
-                <span class="mr-2">📤</span> Compartilhar PDF
-            </a>
+            @auth
+                <a href="{{ route('share.pdf') }}" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 flex items-center">
+                    <span class="mr-2">📤</span> Compartilhar PDF
+                </a>
+            @else
+                <button onclick="showLoginPopup()" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 flex items-center">
+                    <span class="mr-2">📤</span> Compartilhar PDF
+                </button>
+            @endauth
         </div>
     </div>
     
     <!-- Dropdown mobile do avatar (oculto por padrão) -->
     <div id="mobile-user-menu" class="hidden md:hidden px-4 py-3 bg-white border-t border-gray-200">
-        <div class="flex items-center mb-4 pb-2 border-b border-gray-200">
-            <img src="storage/usuario.png" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 mr-3">
-            <div>
-                <p class="font-medium text-gray-800">Nome do Usuário</p>
-                <p class="text-sm text-gray-500">usuario@email.com</p>
+        @auth
+            <div class="flex items-center mb-4 pb-2 border-b border-gray-200">
+                <img src="{{ Auth::user()->avatar ?? 'storage/usuario.png' }}" alt="Usuário" class="h-10 w-10 rounded-full border-2 border-indigo-200 mr-3">
+                <div>
+                    <p class="font-medium text-gray-800">{{ Auth::user()->name }}</p>
+                    <p class="text-sm text-gray-500">{{ Auth::user()->email }}</p>
+                </div>
             </div>
-        </div>
-        <div class="space-y-2">
-            <a href="#" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200">
-                Meu Perfil
-            </a>
-            <a href="#" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200">
-                Minhas Leituras
-            </a>
-            <a href="#" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200">
-                Favoritos
-            </a>
-            <a href="#" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200">
-                Configurações
-            </a>
-            <div class="pt-2 mt-2 border-t border-gray-200">
-                <a href="#" class="block w-full px-3 py-2 rounded-md font-medium text-red-600 hover:bg-red-50 transition-all duration-200">
-                    Sair
+            <div class="space-y-2">
+                <a href="/perfil" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200">
+                    Meu Perfil
+                </a>
+                <a href="/profile" class="block w-full px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200">
+                    Configurações
+                </a>
+                <div class="pt-2 mt-2 border-t border-gray-200">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-3 py-2 rounded-md font-medium text-red-600 hover:bg-red-50 transition-all duration-200">
+                            Sair
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @else
+            <div class="space-y-3">
+                <a href="{{ route('login') }}" class="block w-full px-3 py-2 text-center bg-indigo-600 text-white rounded-md hover:bg-indigo-700 font-medium transition-colors">
+                    Entrar
+                </a>
+                <a href="{{ route('register') }}" class="block w-full px-3 py-2 text-center border border-indigo-600 text-indigo-600 rounded-md hover:bg-indigo-50 font-medium transition-colors">
+                    Cadastrar
                 </a>
             </div>
-        </div>
+        @endauth
     </div>
 </header>
 
@@ -391,6 +432,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+function showLoginPopup() {
+    document.getElementById('login-popup').classList.remove('hidden');
+    // Fecha outros menus abertos
+    document.getElementById('mobile-menu').classList.add('hidden');
+    document.getElementById('mobile-user-menu').classList.add('hidden');
+}
 </script>
 
 <style>
