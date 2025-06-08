@@ -63,9 +63,10 @@
             </div>
 
             <!-- Outros itens do menu -->
-            <a href="#" class="px-3 py-2 rounded-md font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 flex items-center">
+            <a href="#" class="px-3 py-2 rounded-md font-medium text-gray-400 cursor-not-allowed opacity-50 flex items-center pointer-events-none">
                 <span class="mr-1">🔥</span> Mais lidos
             </a>
+
             
             <!-- Botão de Compartilhar PDF -->
             @auth
@@ -438,6 +439,7 @@ function showLoginPopup() {
     document.getElementById('mobile-menu').classList.add('hidden');
     document.getElementById('mobile-user-menu').classList.add('hidden');
 }
+
 </script>
 
 <style>
