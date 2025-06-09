@@ -82,7 +82,7 @@ php artisan serve
 
 ---
 
-## 🌐 Projeto Online (opcional)
+## 🌐 Projeto Online
 
 ➡️ Acesse a versão online do projeto:  
 **https://bookfyapp.com.br/**
