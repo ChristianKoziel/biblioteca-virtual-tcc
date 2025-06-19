@@ -25,11 +25,14 @@
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 hover:shadow-lg transition-transform duration-300 flex flex-col h-full">
                     <!-- Capa do livro -->
                     <div class="relative pt-[140%]">
-                        <img src="{{ asset('storage/' . $pdf->image_path.'.jpg') }}" 
-                             alt="Capa do livro {{ $pdf->title }}" 
-                             class="absolute top-0 left-0 w-full h-full object-contain cursor-pointer"
-                             onclick="openBookPopup('{{ $pdf->title }}', '{{ $pdf->author }}', '{{ $pdf->description }}', '{{ route('book.download', $pdf->id) }}', '{{ asset('storage/' . $pdf->image_path.'.jpg') }}')">
+                        <img
+                            src="{{ str_replace('https://', 'http://', asset('storage/' . $pdf->image_path . '.jpg')) }}"
+                            alt="Capa do livro {{ $pdf->title }}"
+                            class="absolute top-0 left-0 w-full h-full object-contain cursor-pointer"
+                            onclick="openBookPopup('{{ $pdf->title }}', '{{ $pdf->author }}', '{{ $pdf->description }}', '{{ route('book.download', $pdf->id) }}', '{{ str_replace('https://', 'http://', asset('storage/' . $pdf->image_path . '.jpg')) }}')"
+                        >
                     </div>
+
                     
                     <!-- Detalhes do livro -->
                     <div class="p-4 flex flex-col flex-grow">

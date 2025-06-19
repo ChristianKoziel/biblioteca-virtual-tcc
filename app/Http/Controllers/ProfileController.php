@@ -15,6 +15,7 @@ use App\Models\Upload;
 use Illuminate\Support\Str;
 use Spatie\PdfToImage\Pdf as PdfToImage;
 use \Imagick;
+use Jenssegers\Agent\Agent;
 
 class ProfileController extends Controller
 {
@@ -45,6 +46,13 @@ class ProfileController extends Controller
     }
 
     // Página home
+    public function saude(Request $request)
+    {
+        $agent = new Agent();
+        $isMobile = $agent->isMobile();
+        
+        return view('saude', ['isMobile' => $isMobile]);
+    }
     public function home(Request $request) 
     {
         $filter = $request->input('filter');

@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "intervention/image": "^3.11",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
         "smalot/pdfparser": "^2.11",

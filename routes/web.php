@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 // Rota principal acessível sem login
 Route::get('/', [ProfileController::class, 'home'])->name('home');
+Route::get('/saude-em-dia', [ProfileController::class, 'saude'])->name('saude');
 
 // Rota de download (acessível apenas para autenticados)
 Route::get('/download/{id}', [ProfileController::class, 'download'])
